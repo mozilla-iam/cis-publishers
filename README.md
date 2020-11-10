@@ -43,3 +43,15 @@ Make sure to run MAWS first, so you have access to the SSM parameters in `mozill
 ```bash
 $ PYTHONPATH="." serverless invoke local -f ldap --stage production
 ```
+
+# Use as a library
+
+The cis_publishers.common code is intended to be used as a library for whatever you like. For example, assuming
+you have `OAUTH_CLIENT_ID` and `OAUTH_CLIENT_SECRET` set, you can read in a CIS profile like so:
+
+```python
+>>> from cis_publishers.common import Profile
+>>> april = Profile(email="apking@mozilla.com")
+>>> april
+{'access_information': {'access_provider': None, 'hris': {'egencia_pos_country': 'US', 'employee_id': '123456', 'managers_primary_work_email': '...'}
+```
