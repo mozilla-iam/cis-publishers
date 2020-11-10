@@ -19,7 +19,7 @@ logger.addHandler(logging.StreamHandler())
 def handle(event: dict, context=None) -> int:
     main()
 
-    return 200
+    return None
 
 
 def get_ldap_dump(bucket: str = None, key: str = None, filename: str = None) -> dict:
