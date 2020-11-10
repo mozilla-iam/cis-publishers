@@ -1,0 +1,67 @@
+service: cis-publishers-ldap
+plugins:
+  - serverless-python-requirements
+custom:
+  pythonRequirements:
+    fileName: ../requirements.txt
+    layer: true
+  IAM_DISCOVERY_URL:
+    production: https://auth.mozilla.com/.well-known/mozilla-iam
+    development: https://auth.allizom.org/.well-known/mozilla-iam
+    testing: https://auth.allizom.org/.well-known/mozilla-iam
+  LDAP_USER_ID_PREFIX:
+    production: ad|Mozilla-LDAP
+    testing: ad|Mozilla-LDAP
+    development: ad|Mozilla-LDAP-Dev
+provider:
+  name: aws
+  region: us-west-2
+  runtime: python3.8
+  environment:
+    IAM_DISCOVERY_URL: ${self:custom.IAM_DISCOVERY_URL.${opt:stage, self:provider.stage}}
+
+    # In theory, this should be discoverable via IAM_DISCOVERY_URL, but it's completely broken
+    # in development / testing, which just use the production endpoints anyways
+    OIDC_DISCOVERY_URL: https://auth.mozilla.com/.well-known/openid-configuration
+
+    # No idea why this isn't kept in the discovery URL
+    CIS_NULL_PROFILE_URL: https://raw.githubusercontent.com/mozilla-iam/cis/master/python-modules/cis_profile/cis_profile/data/user_profile_null.json
+  # TODO: Use serverless-iam-roles-per-function
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - "s3:ListBucket"
+        - "s3:GetObject"
+      Resource:
+        - arn:aws:s3:::cache.ldap.sso.mozilla.com
+        - arn:aws:s3:::cache.ldap.sso.mozilla.com/*
+    # TODO: Support this use of lastRun-production.json, to do quicker runs that can detect only changes
+    - Effect: Allow
+      Action:
+        - "s3:PutObject"
+      Resource:
+        - arn:aws:s3:::cache.ldap.sso.mozilla.com/lastRun*
+    - Effect: Allow
+      Action:
+        - "ssm:GetParameterHistory"
+        - "ssm:GetParametersByPath"
+        - "ssm:GetParameters"
+        - "ssm:GetParameter"
+      Resource:
+        - ${ssm:/iam/${opt:stage, self:provider.stage}/ldap_signing_key~true}
+functions:
+  ldap:
+    handler: cis_publishers.ldap.handler.handle
+    environment:
+      LDAP_CACHE_S3_BUCKET: cache.ldap.sso.mozilla.com
+      LDAP_CACHE_S3_KEY: ldap_users.json.xz
+      LDAP_USER_ID_PREFIX: ${self:custom.LDAP_USER_ID_PREFIX.${opt:stage, self:provider.stage}}
+      OAUTH_CLIENT_ID: ${ssm:/iam/cis/${opt:stage, self:provider.stage}/ldap_publisher/client_id~true}
+      OAUTH_CLIENT_SECRET: ${ssm:/iam/cis/${opt:stage, self:provider.stage}/ldap_publisher/client_secret~true}
+      PUBLISHER_NAME: ldap
+      PUBLISHER_SIGNING_KEY: ${ssm:/iam/${opt:stage, self:provider.stage}/ldap_signing_key~true}
+    layers:
+      - { Ref: PythonRequirementsLambdaLayer }
+    description: Publish LDAP users to CIS
+    memorySize: 512
+    timeout: 900
