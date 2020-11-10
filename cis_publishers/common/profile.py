@@ -39,12 +39,6 @@ class ProfileDict(UserDict):
         super().__init__()
 
     def __getitem__(self, k):
-        # if isinstance(self.data[k], SignableAttribute):
-        #     if "value" in self.data[k]:
-        #         return self.data[k]["value"]
-        #     else:
-        #         return self.data[k]["values"]
-
         return self.data[k]
 
     def __setitem__(self, k, v):
@@ -138,11 +132,6 @@ class Profile(UserDict):
             # self._profile -> self.data
             elif isinstance(v, SignableAttribute) and "value" in v:
                 output_node[k] = v.value
-
-                # if "value" in v:
-                #     output_node[k] = v["value"]
-                # else:
-                #     output_node[k] = v["values"]
 
             # Has a value or value setting, but it's a dict, indicating that we're reducing from
             # an initial profile (from the skeleton or people) into self._profile
