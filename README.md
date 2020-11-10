@@ -36,7 +36,7 @@ JSON.stringify(jwk);
 
 ## Running locally
 
-You can run the LDAP publisher locally to verify that it works. Make sure to set DRY_RUN if you want it to dry run.
+You can run the LDAP publisher locally to verify that it works. Make sure to set `DRY_RUN` if you want it to dry run.
 
 Make sure to run MAWS first, so you have access to the SSM parameters in `mozilla-iam`.
 
