@@ -52,6 +52,10 @@ provider:
 functions:
   ldap:
     handler: cis_publishers.ldap.handler.handle
+    events:
+      - schedule:
+          rate: rate(30 minutes)
+          enabled: true
     environment:
       LDAP_CACHE_S3_BUCKET: cache.ldap.sso.mozilla.com
       LDAP_CACHE_S3_KEY: ldap_users.json.xz
