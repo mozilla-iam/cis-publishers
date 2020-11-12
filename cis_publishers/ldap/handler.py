@@ -157,8 +157,7 @@ def synchronize(email, ldap_profile):
         logger.info(f"Creating user: {user_id} ({email})")
 
     # Currently, only publish a changed profile
-    # TODO: remove dry_run once we are sure everything would work correctly
-    p.publish(display_level=display_level, dry_run=True)
+    p.publish(display_level=display_level)
 
     return True
 
