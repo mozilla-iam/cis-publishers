@@ -121,6 +121,7 @@ def synchronize(email, ldap_profile):
         # Note that as it currently stands (2020-10-10), the LDAP publisher will only ever UPDATE a profile,
         # it will never CREATE one. This code remains in case the decision ever changes, as it is known to
         # work properly, and it fully documents what would be done should the LDAP publisher ever create profiles.
+
         return False  # noqa
 
         p = Profile()
@@ -137,7 +138,7 @@ def synchronize(email, ldap_profile):
             "phone_numbers": phone_numbers,
             "primary_email": email,
             "ssh_public_keys": ssh_public_keys,
-            "user_id": f"{prefix}|{user_id}",
+            "user_id": f"{prefix}|{user_id}",  # TODO: ONLY EVER USE PREFIX FOR EMPLOYEES, OTHERWISE QUERY AUTH0 FOR user_id INSTEAD
             "usernames": {
                 "LDAP-posix_id": ldap_profile.get("posix", {}).get("uid"),
                 "LDAP-posix_uid": ldap_profile.get("posix", {}).get("uid_number"),
