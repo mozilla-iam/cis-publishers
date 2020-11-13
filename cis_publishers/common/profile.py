@@ -82,7 +82,7 @@ class Profile(UserDict):
         self._walk(retrieved_profile, self._profile)
         self._walk(self._profile, self.data)
 
-        # We can't active on inactive profiles unless we're the HRIS publisher
+        # We can't set active on inactive profiles unless we're the HRIS publisher
         if allow_inactive is False and self.data["active"] is False:
             raise InactiveProfileException
 
@@ -217,7 +217,7 @@ class Profile(UserDict):
     def publish(self, display_level: str = None, dry_run: bool = False):
         self.sign(display_level)
 
-        [logger.info(f"Updating {attribute} on {self.data['primary_email']}: {message}")
+        [logger.info(f"Updating {attribute} on {self.data['user_id']} ({self.data['primary_email']}): {message}")
          for attribute, message in sorted(self.__notifications)]
 
         # Only publish the profile if there has been a change to it
