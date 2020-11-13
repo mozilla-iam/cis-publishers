@@ -71,12 +71,6 @@ def synchronize(email, ldap_profile):
         p = Profile(email=email)
         logger.debug(f"Updating user: {user_id} ({email})")
 
-        # Warn if the user has a user_id that doesn't begin with `ad|Mozilla-LDAP`, which we do because
-        # this is a change of behavior from the previous publisher. This (TODO) can probably be removed pretty
-        # shortly after deciding this is the correct behavior
-        if not p["user_id"].startswith(prefix):
-            logger.info(f"{user_id} ({email})'s CIS account does not start with {prefix}")
-
         p.update({
             "pgp_public_keys": pgp_public_keys,
             "ssh_public_keys": ssh_public_keys,
