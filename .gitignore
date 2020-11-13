@@ -1,4 +1,5 @@
 .idea
+.serverless
 *.pyc
 node_modules
 venv
