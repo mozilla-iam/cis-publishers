@@ -64,5 +64,6 @@ functions:
     layers:
       - { Ref: PythonRequirementsLambdaLayer }
     description: Publish LDAP users to CIS
-    memorySize: 256
+    maximumRetryAttempts: 0
+    memorySize: 2048  # we see a corresponding decrease in runtime with increased RAM, so 2048 decreases runtime to ~45s
     timeout: 900
