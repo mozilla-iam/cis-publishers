@@ -51,6 +51,10 @@ def get_ldap_dump(bucket: str = None, key: str = None, filename: str = None) -> 
 
 
 def synchronize(email, ldap_profile):
+    # The mapping of LDAP field names to the ldap_profile key names can be found
+    # in git-internal.mozilla.org/sysadmins/puppet/modules/ldap_crons/files/ldap_to_cis/ldap_to_cis.py
+    # in the structure_output function
+    
     # convenience variables to make referring to user profile data cleaner
     dn = ldap_profile["distinguished_name"]
     pgp_public_keys = {f"LDAP-{i}": f"0x{key}".replace(" ", "").replace("0x0x", "0x")
