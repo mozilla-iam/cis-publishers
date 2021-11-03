@@ -24,13 +24,7 @@ provider:
   runtime: python3.8
   environment:
     IAM_DISCOVERY_URL: ${self:custom.IAM_DISCOVERY_URL.${opt:stage, self:provider.stage}}
-
-    # In theory, this should be discoverable via IAM_DISCOVERY_URL, but it's completely broken
-    # in development / testing, which just use the production endpoints anyways
-    OIDC_DISCOVERY_URL: https://auth.mozilla.com/.well-known/openid-configuration
-
-    # No idea why this isn't kept in the discovery URL
-    CIS_NULL_PROFILE_URL: https://raw.githubusercontent.com/mozilla-iam/cis/master/python-modules/cis_profile/cis_profile/data/user_profile_null.json
+    CIS_NULL_PROFILE_URL: https://auth.mozilla.com/.well-known/user_profile_null.json
   # TODO: Use serverless-iam-roles-per-function
   iamRoleStatements:
     - Effect: Allow

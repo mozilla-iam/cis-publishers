@@ -24,8 +24,8 @@ def __get_bearer_token():
     if BEARER_TOKEN is not None:
         return BEARER_TOKEN
 
-    if not environ.get("IAM_DISCOVERY_URL") or not environ.get("OIDC_DISCOVERY_URL"):
-        logging.error("IAM_DISCOVERY_URL or OIDC_DISCOVERY_URL not set")
+    if not environ.get("IAM_DISCOVERY_URL"):
+        logging.error("IAM_DISCOVERY_URL not set")
         raise EnvironmentError
 
     # First, we need to retrieve the discovery URL's contents
@@ -33,7 +33,8 @@ def __get_bearer_token():
     CHANGE_API_URL = discovery["api"]["endpoints"]["change"]
     OAUTH_AUDIENCE = discovery["api"]["audience"]
     PERSON_API_URL = discovery["api"]["endpoints"]["person"]
-    TOKEN_ENDPOINT = requests.get(environ["OIDC_DISCOVERY_URL"]).json()["token_endpoint"]
+    OIDC_DISCOVERY_URL = discovery["oidc_discovery_uri"]
+    TOKEN_ENDPOINT = requests.get(OIDC_DISCOVERY_URL).json()["token_endpoint"]
 
     # Then, we need to reach out to auth0 to get a bearer token
     BEARER_TOKEN = requests.post(TOKEN_ENDPOINT, json={
