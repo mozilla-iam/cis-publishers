@@ -54,10 +54,12 @@ functions:
       OAUTH_CLIENT_ID: ${ssm:/iam/cis/${opt:stage, self:provider.stage}/ldap_publisher/client_id~true}
       OAUTH_CLIENT_SECRET: ${ssm:/iam/cis/${opt:stage, self:provider.stage}/ldap_publisher/client_secret~true}
       PUBLISHER_NAME: ldap
-      PUBLISHER_SIGNING_KEY: ${ssm:/iam/${opt:stage, self:provider.stage}/ldap_signing_key~true}
+      PUBLISHER_SIGNING_KEY: ${ssm:/iam/cis-publishers/${opt:stage, self:provider.stage}/ldap_signing_key~true}
     layers:
       - { Ref: PythonRequirementsLambdaLayer }
     description: Publish LDAP users to CIS
     maximumRetryAttempts: 0
     memorySize: 2048  # we see a corresponding decrease in runtime with increased RAM, so 2048 decreases runtime to ~45s
     timeout: 900
+resources:
+  Description: Mozilla IAM CIS publishers, including the LDAP publisher, which publish profiles into CIS
