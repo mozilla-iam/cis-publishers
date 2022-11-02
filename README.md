@@ -44,7 +44,7 @@ Make sure to run [MAWS](https://github.com/mozilla-iam/mozilla-aws-cli) first, s
 $ PYTHONPATH="." serverless invoke local -f ldap --stage production
 ```
 
-## Use as a library
+## Use as a library (UNSUPPORTED)
 
 The cis_publishers.common code is intended to be used as a library for whatever you like. For example, assuming
 you have `OAUTH_CLIENT_ID` and `OAUTH_CLIENT_SECRET` set, you can read in a CIS profile like so:
@@ -55,6 +55,8 @@ you have `OAUTH_CLIENT_ID` and `OAUTH_CLIENT_SECRET` set, you can read in a CIS 
 >>> jdoe
 {'access_information': {'access_provider': None, 'hris': {'egencia_pos_country': 'US', 'employee_id': '123456', 'managers_primary_work_email': '...'}
 ```
+
+However, this is unsupported, as this module is not published to Pypi and so can only be used as a locally-installed requirement.
 
 ## TODO
 

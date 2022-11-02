@@ -1,0 +1,5 @@
+# These requirements were migrated from setup.py to requirements.txt.
+
+boto3
+python-jose[cryptography]
+requests
