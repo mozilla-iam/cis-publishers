@@ -83,7 +83,7 @@ class Profile(UserDict):
         self._walk(self._profile, self.data)
 
         # We can't set active on inactive profiles unless we're the HRIS publisher
-        if allow_inactive is False and self.data["active"] is False:
+        if allow_inactive is False and self.data.get("active", False) is False:
             raise InactiveProfileException
 
         # Store the initial state of the Profile, for future diffing purposes?
