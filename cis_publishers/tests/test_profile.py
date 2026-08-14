@@ -20,7 +20,7 @@ class SignableAttributeListNormalizationTests(unittest.TestCase):
     def test_some_to_empty(self):
         attr = attribute_factory({"foo": None, "bar": None})
         attr.values = []
-        self.assertEqual(attr.data["values"], [])
+        self.assertEqual(attr.data["values"], {})
 
     def test_none_to_empty(self):
         attr = attribute_factory(None)
