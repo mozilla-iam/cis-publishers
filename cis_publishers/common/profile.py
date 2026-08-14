@@ -270,9 +270,12 @@ class SignableAttribute(UserDict):
     # things that they can't. The change/update mechanism is a giant pain to process and work
     # with, and I don't want to have to figure it out in here.
     def __setattr__(self, k, v):
-        # CIS doesn't actually deal in arrays, they are always dictionaries with each value set to null
-        if isinstance(v, list) and v:
-            v = {v: None for v in sorted(v)}
+        # CIS doesn't actually deal in arrays, they are always dictionaries with each value set to null.
+        # Note: this must also convert *empty* lists (e.g. a user with no LDAP groups) into an empty dict -
+        # otherwise a raw `[]` can get written into a field the schema defines as `null` or `object`, which is
+        # what was happening when a user's group list emptied out.
+        if isinstance(v, list):
+            v = {i: None for i in sorted(v)}
 
         # Similarly, it doesn't handle numbers either: only strings - not isinstance() since bool is an int
         if type(v) in (int, float):
