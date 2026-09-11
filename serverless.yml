@@ -38,6 +38,14 @@ provider:
         - "s3:PutObject"
       Resource:
         - arn:aws:s3:::cache.ldap.sso.mozilla.com/lastRun*
+stages:
+  default:
+    resolvers:
+      awsAccount1:
+        type: aws
+        rawSsm:
+          type: ssm
+          rawOrDecrypt: raw
 functions:
   ldap:
     handler: cis_publishers.ldap.handler.handle
@@ -49,10 +57,10 @@ functions:
       LDAP_CACHE_S3_BUCKET: cache.ldap.sso.mozilla.com
       LDAP_CACHE_S3_KEY: ldap_users.json.xz
       LDAP_USER_ID_PREFIX: ${self:custom.LDAP_USER_ID_PREFIX.${opt:stage, self:provider.stage}}
-      OAUTH_CLIENT_ID: ${ssm:/iam/cis/${opt:stage, self:provider.stage}/ldap_publisher/client_id~true}
-      OAUTH_CLIENT_SECRET: ${ssm:/iam/cis/${opt:stage, self:provider.stage}/ldap_publisher/client_secret~true}
+      OAUTH_CLIENT_ID: ${ssm:/iam/cis/${opt:stage, self:provider.stage}/ldap_publisher/client_id}
+      OAUTH_CLIENT_SECRET: ${ssm:/iam/cis/${opt:stage, self:provider.stage}/ldap_publisher/client_secret}
       PUBLISHER_NAME: ldap
-      PUBLISHER_SIGNING_KEY: ${ssm:/iam/cis-publishers/${opt:stage, self:provider.stage}/ldap_signing_key~true}
+      PUBLISHER_SIGNING_KEY: ${awsAccount1:rawSsm:/iam/cis-publishers/${opt:stage, self:provider.stage}/ldap_signing_key}
     layers:
       - { Ref: PythonRequirementsLambdaLayer }
     description: Publish LDAP users to CIS
