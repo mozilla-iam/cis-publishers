@@ -21,7 +21,7 @@ package:
 provider:
   name: aws
   region: us-west-2
-  runtime: python3.8
+  runtime: python3.10
   environment:
     IAM_DISCOVERY_URL: ${self:custom.IAM_DISCOVERY_URL.${opt:stage, self:provider.stage}}
     CIS_NULL_PROFILE_URL: https://auth.mozilla.com/.well-known/user_profile_null.json
