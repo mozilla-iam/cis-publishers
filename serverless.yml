@@ -12,6 +12,10 @@ custom:
     production: ad|Mozilla-LDAP
     testing: ad|Mozilla-LDAP
     development: ad|Mozilla-LDAP-Dev
+  CIS_NULL_PROFILE_URL:
+    production: https://auth.mozilla.com/.well-known/user_profile_null.json
+    development: https://auth.allizom.org/.well-known/user_profile_null.json
+    testing: https://auth.allizom.org/.well-known/user_profile_null.json
 package:
   exclude:
     - node_modules/**
@@ -22,7 +26,7 @@ provider:
   runtime: python3.10
   environment:
     IAM_DISCOVERY_URL: ${self:custom.IAM_DISCOVERY_URL.${opt:stage, self:provider.stage}}
-    CIS_NULL_PROFILE_URL: https://auth.mozilla.com/.well-known/user_profile_null.json
+    CIS_NULL_PROFILE_URL: ${self:custom.CIS_NULL_PROFILE_URL.${opt:stage, self:provider.stage}}
   # TODO: Use serverless-iam-roles-per-function
   iamRoleStatements:
     - Effect: Allow
