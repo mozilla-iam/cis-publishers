@@ -1,6 +1,4 @@
 service: cis-publishers
-plugins:
-  - serverless-python-requirements
 custom:
   pythonRequirements:
     dockerizePip: true
