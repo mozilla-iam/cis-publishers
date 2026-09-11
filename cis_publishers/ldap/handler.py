@@ -30,10 +30,8 @@ def get_ldap_dump(bucket: str = None, key: str = None, filename: str = None) -> 
     :return: contents of compressed (or uncompressed) LDAP dump, as a dictionary
     """
     if bucket and key:
+        logger.info("Reloading LDAP data from S3 %s/%s" % (bucket, key))
         s3 = boto3.client("s3")
-
-        logger.info("Reloading LDAP data from S3")
-
         s3object = s3.get_object(Bucket=bucket,
                                  Key=key)["Body"]
 
@@ -43,6 +41,7 @@ def get_ldap_dump(bucket: str = None, key: str = None, filename: str = None) -> 
         else:
             return json.loads(s3object.read())
     elif filename:
+        logger.info("Reloading LDAP data from File %s" % (filename))
         if not exists(filename):
             raise FileNotFoundError(f"Cannot open {filename}")
 
